@@ -1,0 +1,33 @@
+﻿﻿# .NET (C#)
+**/bin/
+**/obj/
+**/.vs/
+**/*.user
+**/*.suo
+**/*.cache
+**/TestResults/
+**/packages/
+**/*.userosscache
+**/*.vspscc
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.DS_Store
+*.log
+
+# IDE и редакторы
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.bak
+temp/
