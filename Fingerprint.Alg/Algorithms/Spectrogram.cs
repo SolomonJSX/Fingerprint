@@ -5,9 +5,10 @@ namespace Fingerprint.Alg.Algorithms;
 
 public class Spectrogram
 {
-    private const int dspRatio = 4;  
+    private const double dspRatio = 4;  
+    private const double windowSize = 1024;
     
-    public IEnumerable<Peak> ExtractPeaks(double[,] spectrogram, double audioDuration, double sampleRate)
+    public IEnumerable<Peak> ExtractPeaks(double[][] spectrogram, double audioDuration, double sampleRate)
     {
         if (spectrogram.Length < 1)
             return [];
@@ -27,7 +28,36 @@ public class Spectrogram
         var frameDuration = audioDuration / (double) spectrogram.Length;
         
         double effectiveSampleRate = sampleRate / (double) dspRatio;
-        
+        double freqResolution = effectiveSampleRate / windowSize;
+
+        for (int frameIdx = 0; frameIdx < spectrogram.Length; frameIdx++)
+        {
+            var frame = spectrogram[frameIdx];
+
+            List<double> maxMags = new();
+            List<int> freqIndices = new();
+
+            List<Maxies> binBandMaxies = new();
+
+            foreach (var band in bands)
+            {
+                Maxies maxx = new Maxies(0, band.Min);
+                double maxMag = 0;
+
+                for (int idx = band.Min; idx <= band.Max; idx++)
+                {
+                    double mag = frame[idx];
+
+                    if (mag > maxMag)
+                    {
+                        maxMag = mag;
+                        maxx = new Maxies(maxMag, idx);
+                    }
+                }
+                
+                binBandMaxies.Add(maxx);
+            }
+        }
 
         return default;
     }

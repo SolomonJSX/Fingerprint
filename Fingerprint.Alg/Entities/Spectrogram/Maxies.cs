@@ -1,7 +1,7 @@
 ﻿namespace Fingerprint.Alg.Entities.Spectrogram;
 
-public struct Maxies
+public struct Maxies(double maxMag, int freqIdx)
 {
-    public double MaxMag { get; set; }
-    public int FreqIdx { get; set; }
+    public double MaxMag { get; set; } = maxMag;
+    public int FreqIdx { get; set; } = freqIdx;
 }
