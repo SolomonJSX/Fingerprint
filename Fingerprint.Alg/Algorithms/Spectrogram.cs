@@ -37,28 +37,56 @@ public class Spectrogram
             List<double> maxMags = new();
             List<int> freqIndices = new();
 
-            List<Maxies> binBandMaxies = new();
-
+            var bindBandMaxies = new List<Maxies>();
+            
             foreach (var band in bands)
             {
-                Maxies maxx = new Maxies(0, band.Min);
                 double maxMag = 0;
-
-                for (int idx = band.Min; idx <= band.Max; idx++)
+                int bestIdx = band.Min;
+                
+                for (int idx = band.Min; idx < band.Max; idx++)
                 {
                     double mag = frame[idx];
 
                     if (mag > maxMag)
                     {
                         maxMag = mag;
-                        maxx = new Maxies(maxMag, idx);
+                        bestIdx = idx;
                     }
                 }
                 
-                binBandMaxies.Add(maxx);
+                bindBandMaxies.Add(new Maxies(maxMag = maxMag,  bestIdx = bestIdx));
+            }
+
+            foreach (var v in bindBandMaxies)
+            {
+                maxMags.Add(v.MaxMag);
+                freqIndices.Add(v.FreqIdx);
+            }
+
+            double maxMagsSum = 0;
+            
+            foreach (var m in maxMags)
+                maxMagsSum += m;
+
+            double average = maxMagsSum / maxMags.Count;
+
+            for (int i = 0; i < maxMags.Count; i++)
+            {
+                if (maxMags[i] > average)
+                {
+                    double peakTime = frameIdx * frameDuration;
+                    double peakFreq = freqIndices[i] * freqResolution;
+                    
+                    peaks.Add(new Peak()
+                    {
+                        Freq =  peakFreq,
+                        Time =  peakTime,
+                    });
+                }
             }
         }
 
-        return default;
+        return peaks;
     }
 }
