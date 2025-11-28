@@ -7,6 +7,41 @@ public class Spectrogram
 {
     private const double dspRatio = 4;  
     private const double windowSize = 1024;
+
+    public static double[] Downsample(double[] input, int originalSampleRate, int targetSampleRate)
+    {
+        if (originalSampleRate <= 0 || targetSampleRate <= 0)
+            throw new ArgumentException("Sample rates must be positive");
+        
+        if (targetSampleRate > originalSampleRate)
+            throw new ArgumentException("Target sample rate must be less than or equal to sample rate");
+        
+        int ratio = originalSampleRate / targetSampleRate;
+        
+        if (ratio <= 0)
+            throw new ArgumentException("Invalid ratio calculated from sample rates.");
+        
+        var resampled = new List<double>();
+
+        for (var i = 0; i < input.Length; i += ratio)
+        {
+            int end = i + ratio;
+            
+            if (end > input.Length)
+                end = input.Length;
+
+            double sum = 0.0;
+            
+            for (int j = i; j < end; j++)
+                sum += input[j];
+
+            double avg = sum / (end - i);
+            
+            resampled.Add(avg);
+        }
+        
+        return resampled.ToArray();
+    }
     
     public IEnumerable<Peak> ExtractPeaks(double[][] spectrogram, double audioDuration, double sampleRate)
     {
