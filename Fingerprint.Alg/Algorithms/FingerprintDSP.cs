@@ -1,25 +1,103 @@
-﻿using Fingerprint.Alg.Entities;
+﻿using System.Numerics;
+using Fingerprint.Alg.Entities;
 using Fingerprint.Alg.Entities.Spectrogram;
+using Fingerprint.Alg.Entities.Spectrogram.Enums;
 
 namespace Fingerprint.Alg.Algorithms;
 
-public class Spectrogram
+public class FingerprintDSP
 {
-    private const double dspRatio = 4;  
-    private const double windowSize = 1024;
+    const int dspRatio = 4;
+    const int windowSize = 1024;
+    const double maxFreq = 5000.0;
+    const int hopSize = windowSize / 2;
+    const WindowType windowType = WindowType.Hanning;
+    
 
+    public static List<double[]> Spectrogram(double[] sample, int sampleRate)
+    {
+        var filtered = LowPassFilter(maxFreq, sampleRate, sample);
+        
+        var downSampled = Downsample(filtered, sampleRate, sampleRate / dspRatio);
+        
+        var window = new double[windowSize];
+
+        for (int i = 0; i < window.Length; i++)
+        {
+            double theta = 2 * Math.PI * i / (windowSize - 1);
+            if (windowType == WindowType.Hamming) 
+                window[i] = 0.54 - 0.46 * Math.Cos(theta);
+            else
+                window[i] = 0.5 - 0.5 * Math.Cos(theta);
+        }
+        
+        var spectrogram = new List<double[]>();
+
+        for (int start = 0; start + windowSize <= downSampled.Length; start += hopSize)
+        {
+            int end = start + windowSize;
+            
+            var frame = new double[windowSize];
+            
+            Array.Copy(downSampled, start, frame, 0, windowSize);
+            
+            for (int j = 0; j < windowSize; j++)
+                frame[j] *= window[j];
+            
+            var fftResult = FFTUtil.FFT(frame);
+            
+            var mag = new double[fftResult.Length / 2];
+
+            for (int j = 0; j < mag.Length; j++)
+                mag[j] = fftResult[j].Magnitude;
+            
+            spectrogram.Add(mag);
+        }
+        
+        return spectrogram;
+    }
+
+    public  static double[] LowPassFilter(double cutoffFrequency, double sampleRate, double[] input)
+    {
+        double rc = 1.0 / (2 * Math.PI * cutoffFrequency);
+        double dt = 1.0 / sampleRate;
+        double alpha = dt / (rc + dt);
+        
+        double[] filteredSignal = new double[input.Length];
+
+        double prevOutput = 0.0;
+        
+        for (int i = 0; i < input.Length; i++)
+        {
+            var x = input[i];
+
+            if (i == 0)
+            {
+                filteredSignal[i] = x * alpha;
+            }
+            else
+            {
+                filteredSignal[i] = alpha * x + (1 - alpha) * prevOutput;
+            }
+            
+            prevOutput = filteredSignal[i];
+        }
+        
+        return filteredSignal;
+    }
+    
     public static double[] Downsample(double[] input, int originalSampleRate, int targetSampleRate)
     {
         if (originalSampleRate <= 0 || targetSampleRate <= 0)
-            throw new ArgumentException("Sample rates must be positive");
+            throw new Exception("Sample rates must be positive");
         
         if (targetSampleRate > originalSampleRate)
-            throw new ArgumentException("Target sample rate must be less than or equal to sample rate");
+            throw new Exception("Target sample rate must be less than or equal to sample rate");
         
         int ratio = originalSampleRate / targetSampleRate;
         
         if (ratio <= 0)
-            throw new ArgumentException("Invalid ratio calculated from sample rates.");
+            throw new Exception("Invalid ratio calculated from sample rates.");
         
         var resampled = new List<double>();
 

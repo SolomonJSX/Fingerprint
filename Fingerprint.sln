@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Alg", "Fingerprint.Alg\Fingerprint.Alg.csproj", "{38902A34-045D-473D-8CBE-31BF9B27CB00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Domain", "Fingerprint.Domain\Fingerprint.Domain.csproj", "{96B4B26E-3BC3-455A-B908-DA24315BBE58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerPrint.Main", "FingerPrint.Main\FingerPrint.Main.csproj", "{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B4B26E-3BC3-455A-B908-DA24315BBE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B4B26E-3BC3-455A-B908-DA24315BBE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B4B26E-3BC3-455A-B908-DA24315BBE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B4B26E-3BC3-455A-B908-DA24315BBE58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
