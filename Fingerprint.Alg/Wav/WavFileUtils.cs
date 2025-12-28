@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Fingerprint.Alg.Wav.Entities;
 
 namespace Fingerprint.Alg.Wav;
 
@@ -41,4 +42,35 @@ public static class WavFileUtils
             writer.Write(data);
         }
     }
+
+    public static WavInfo ReadWavInfo(string fileName)
+    {
+        var filesBytes = File.ReadAllBytes(fileName);
+
+        if (filesBytes.Length < 44)
+            throw new Exception("Invalid WAV file size (too small)");
+        
+        using (var ms = new MemoryStream(filesBytes))
+        using (var reader = new BinaryReader(ms))
+        {
+            var header = new WavHeader();
+            
+            header.ChunkID = reader.ReadChars(4);
+            header.ChunkSize = reader.ReadUInt32();
+            header.Format = reader.ReadChars(4);
+            header.Subchunk1ID = reader.ReadChars(4);
+            header.Subchunk1Size = reader.ReadUInt32();
+            header.AudioFormat = reader.ReadUInt16();
+            header.NumChannels = reader.ReadUInt16();
+            header.SampleRate = reader.ReadUInt32();
+            header.BytesPerSec = reader.ReadUInt32();
+            header.BlockAlign = reader.ReadUInt16();
+            header.BitsPerSample = reader.ReadUInt16();
+            header.Subchunk2ID = reader.ReadChars(4);
+            header.Subchunk2Size = reader.ReadUInt32();
+            
+            if (new string(header.))
+        }
+    }
+        
 }
