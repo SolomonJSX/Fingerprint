@@ -31,3 +31,8 @@ yarn-error.log*
 *.tmp
 *.bak
 temp/
+
+*.mp3
+*.wav
+*.m4a
+*.flac
