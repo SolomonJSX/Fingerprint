@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Domain", "Fingerprint.Domain\Fingerprint.Domain.csproj", "{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.API", "Fingerprint.API\Fingerprint.API.csproj", "{03839017-F59C-483D-B7EE-7FFB4B6C02F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03839017-F59C-483D-B7EE-7FFB4B6C02F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03839017-F59C-483D-B7EE-7FFB4B6C02F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03839017-F59C-483D-B7EE-7FFB4B6C02F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03839017-F59C-483D-B7EE-7FFB4B6C02F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

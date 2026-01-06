@@ -2,11 +2,12 @@
 using Dapper;
 using Fingerprint.Domain.Models;
 using Fingerprint.Infrastructure.Entities;
+using Fingerprint.Infrastructure.Services.Interfaces;
 using Npgsql;
 
-namespace Fingerprint.Infrastructure.Services;
+namespace Fingerprint.Infrastructure.Services.Implementations;
 
-public class StorageService(string connectionString)
+public class StorageService(string connectionString) : IStorageService
 {
     private IDbConnection CreateConnection()
     {

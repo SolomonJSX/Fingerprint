@@ -1,10 +1,12 @@
 ﻿using Fingerprint.Domain.Entities;
 using Fingerprint.Domain.Models;
 using Fingerprint.Infrastructure.Services;
+using Fingerprint.Infrastructure.Services.Implementations;
+using Fingerprint.Infrastructure.Services.Interfaces;
 
 namespace Fingerprint.Core.Services;
 
-public class RecognitionService(StorageService storageService)
+public class RecognitionService(IStorageService storageService)
 {
     public RecognitionResult Match(Dictionary<int, Couple> queryFingerprints)
     {

@@ -1,6 +1,7 @@
 ﻿using Fingerprint.Core.Services;
 using Fingerprint.Infrastructure.Algorithms;
 using Fingerprint.Infrastructure.Services;
+using Fingerprint.Infrastructure.Services.Implementations;
 
 string connString = "Host=localhost;Username=postgres;Password=super2015;Database=Fingerprint_db";
 var storage = new StorageService(connString);
@@ -39,7 +40,7 @@ try
     var recognitionService = new RecognitionService(storage);
 
     // Допустим, мы "услышали" этот файл
-    string testFile = @"D:\VS Projects\Fingerprint\FingerPrint.Main\musicTest\Cold.mp3";
+    string testFile = @"D:\VS Projects\Fingerprint\Fingerprint.Backend\FingerPrint.Main\musicTest\Call_Me_Maybe_48004576.mp3";
     
     // Генерируем хеши для него (ID 0, т.к. мы еще не знаем кто это)
     var queryHashes = Fingerprinter.FingerprintAudio(testFile, 0);
