@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Core", "Fingerprint.Core\Fingerprint.Core.csproj", "{38902A34-045D-473D-8CBE-31BF9B27CB00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerPrint.Main", "FingerPrint.Main\FingerPrint.Main.csproj", "{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Infrastructure", "Fingerprint.Infrastructure\Fingerprint.Infrastructure.csproj", "{91868FCA-BF22-4408-B670-2A7A77FD7BFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fingerprint.Domain", "Fingerprint.Domain\Fingerprint.Domain.csproj", "{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38902A34-045D-473D-8CBE-31BF9B27CB00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3CBBA6-AB2E-470B-B130-9B7AFA78F473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91868FCA-BF22-4408-B670-2A7A77FD7BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91868FCA-BF22-4408-B670-2A7A77FD7BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91868FCA-BF22-4408-B670-2A7A77FD7BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91868FCA-BF22-4408-B670-2A7A77FD7BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDF8C5CC-2B63-4A0B-858B-80E148AE656D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
