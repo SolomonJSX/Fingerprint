@@ -1,4 +1,4 @@
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from scrapers.hitmo_scraper import HitmoScraper as TrackInfo
 import requests
 

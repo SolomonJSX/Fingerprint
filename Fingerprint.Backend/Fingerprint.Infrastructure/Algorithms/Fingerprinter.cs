@@ -15,23 +15,31 @@ namespace Fingerprint.Infrastructure.Algorithms
         public static Dictionary<int, Couple> Fingerprint(List<Peak> peaks, int songID)
         {
             var fingerprints = new Dictionary<int, Couple>();
+    
+            // Рекомендуемое значение TargetZoneSize = 5
+            // Это и есть наш Fan-out (один якорь связывается с 5 следующими пиками)
+            int targetZoneSize = 5; 
 
             for (int i = 0; i < peaks.Count; i++)
             {
                 var anchor = peaks[i];
 
-                for (int j = i + 1; j < peaks.Count && j <= i + TargetZoneSize; j++)
+                // Формируем пары в целевой зоне
+                for (int j = i + 1; j < peaks.Count && j <= i + targetZoneSize; j++)
                 {
                     var target = peaks[j];
 
+                    // ВАЖНО: CreateAddress теперь принимает разницу во времени
                     int address = CreateAddress(anchor, target);
+            
                     int anchorTimeMs = (int)(anchor.Time * 1000);
 
-                    fingerprints[address] = new Couple()
+                    // Используем TryAdd, чтобы не падать, если вдруг хеши совпали
+                    fingerprints.TryAdd(address, new Couple()
                     {
                         AnchorTimeMs = anchorTimeMs,
                         SongID = songID
-                    };
+                    });
                 }
             }
 
@@ -40,19 +48,27 @@ namespace Fingerprint.Infrastructure.Algorithms
 
         private static int CreateAddress(Peak anchor, Peak target)
         {
-            int anchorBinFreq = (int)(anchor.Freq / 10);
-            int targetBinFreq = (int)(target.Freq / 10);
+            // 1. Квантуем частоты (делим на 10, чтобы небольшие погрешности не меняли хеш)
+            int f1 = (int)(anchor.Freq / 10);
+            int f2 = (int)(target.Freq / 10);
 
-            int deltaMsRaw = (int)((target.Freq - anchorBinFreq) / 1000);
+            // 2. ВЫЧИСЛЯЕМ РЕАЛЬНУЮ РАЗНИЦУ ВО ВРЕМЕНИ (Delta Time)
+            // Именно это делает отпечаток уникальным!
+            int dt = (int)((target.Time - anchor.Time) * 1000);
 
-            int anchorFreqBits = anchorBinFreq & ((1 << MaxFreqBits) - 1);
-            int targetFreqBits = targetBinFreq & ((1 << MaxFreqBits) - 1);
-            int deltaBits = deltaMsRaw & ((1 << MaxDeltaBits) - 1);
+            // 3. Ограничиваем значения битовыми масками (чтобы влезть в 32 бита)
+            // f1: 9 бит (до 512), f2: 9 бит (до 512), dt: 14 бит (до 16384 мс)
+            int f1Bits = f1 & 0x1FF;
+            int f2Bits = f2 & 0x1FF;
+            int dtBits = dt & 0x3FFF;
 
-            int address = (anchorFreqBits << 23) | (targetFreqBits << 14) | deltaBits;
+            // Сборка хеша:
+            // [ f1 (9 бит) | f2 (9 бит) | dt (14 бит) ]
+            int address = (f1Bits << 23) | (f2Bits << 14) | dtBits;
+    
             return address;
         }
-
+        
         public static Dictionary<int, Couple> FingerprintAudio(string songFilePath, int songID)
         {
             // 1. Проверка конвертации

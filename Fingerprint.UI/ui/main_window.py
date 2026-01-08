@@ -4,7 +4,8 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                              QLineEdit, QPushButton, QLabel, QFrame)
 from PyQt6.QtCore import Qt
 
-from utils.add_song import AddSongWorker
+from utils.AddSongWorker import AddSongWorker
+from utils.RecognizeWorker import RecognizeWorker
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,6 +27,7 @@ class MainWindow(QMainWindow):
         self.btn_recognize = QPushButton("F")
         self.btn_recognize.setObjectName("recognizeButton")
         self.btn_recognize.setFixedSize(180, 180)
+        self.btn_recognize.clicked.connect(self.start_recognition)
         layout.addWidget(self.btn_recognize, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.label_hint = QLabel("Нажми, чтобы распознать")
@@ -133,6 +135,37 @@ class MainWindow(QMainWindow):
         self.btn_add.setEnabled(True)
         self.label_status.setText(message)
         self.input_url.clear()
+
+    # Новые методы в классе MainWindow
+    def start_recognition(self):
+        self.label_hint.setText("Слушаю внимательно (10 сек)...")
+        self.btn_recognize.setEnabled(False)
+        # Можно добавить визуальный эффект, например смену цвета
+        self.btn_recognize.setStyleSheet("background-color: #ff4b2b; border-radius: 90px; color: white; font-size: 80px;")
+        
+        self.rec_worker = RecognizeWorker()
+        self.rec_worker.finished.connect(self.on_recognition_finished)
+        self.rec_worker.start()
+
+    def on_recognition_finished(self, result):
+        self.btn_recognize.setEnabled(True)
+        self.btn_recognize.setStyleSheet("...") # твой стиль кнопки
+        
+        print(f"DEBUG: Получен ответ от сервера: {result}") # Это поможет отладить
+
+        if "error" in result:
+            # Если пришла ошибка (например 404 или 500)
+            self.label_hint.setText(f"❌ {result['error']}")
+            self.label_status.setText("") # Очищаем старый результат!
+        else:
+            # Если песня найдена
+            self.label_hint.setText("✅ Песня найдена!")
+            # Проверь регистр ключей! В C# они могут быть Artist или artist
+            artist = result.get('artist') or result.get('Artist', 'Неизвестно')
+            title = result.get('title') or result.get('Title', 'Неизвестно')
+            score = result.get('score') or result.get('Score', 0)
+            
+            self.label_status.setText(f"🏆 {artist} — {title}\n(Точность: {score})")
 
 if __name__ == "__main__":
     from PyQt6.QtWidgets import QApplication

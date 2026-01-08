@@ -1,4 +1,5 @@
 ﻿using Fingerprint.API.DTOs;
+using Fingerprint.Core.Services;
 using Fingerprint.Infrastructure.Algorithms;
 using Fingerprint.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace Fingerprint.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RecognitionController(IStorageService storageService, HttpClient httpClient) : ControllerBase
+public class RecognitionController(IStorageService storageService, HttpClient httpClient, RecognitionService recognitionService) : ControllerBase
 {
     [HttpPost("add-song")]
     public async Task<ActionResult> AddSong(AddSongRequest request)
@@ -52,6 +53,37 @@ public class RecognitionController(IStorageService storageService, HttpClient ht
         {
             if (System.IO.File.Exists(temptPath))
                 System.IO.File.Delete(temptPath);
+        }
+    }
+
+    [HttpPost("identify")]
+    public async Task<ActionResult> Identify(IFormFile audioFile)
+    {
+        if (audioFile == null || audioFile.Length == 0)
+            return BadRequest("Аудиофайл не получен");
+
+        string tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.wav");
+
+        try
+        {
+            // 1. Сохраняем присланный отрывок во временный файл
+            await using var stream = new FileStream(tempPath, FileMode.Create);
+            await audioFile.CopyToAsync(stream);
+
+            var queryFingerprints = await Task.Run(() => Fingerprinter.FingerprintAudio(tempPath, 0));
+
+            var result = recognitionService.Match(queryFingerprints);
+            
+            if (result == null)
+            {
+                return NotFound(new { Message = "Песня не найдена в базе данных" });
+            }
+
+            return Ok(result); // Возвращает Artist, Title и Score
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Ошибка при распознавании: {ex.Message}");
         }
     }
 }
