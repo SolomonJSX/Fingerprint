@@ -1,16 +1,17 @@
-from scrapers.hitmo_scraper import HitmoScraper
+import sys
+from PyQt6.QtWidgets import QApplication
+from ui.main_window import MainWindow
 
 def main():
-    # URL, который мы хотим проверить
-    test_url = "https://eu.hitmo-top.com/song/48004576"
+    app = QApplication(sys.argv)
     
-    # Вызываем метод нашего класса
-    result = HitmoScraper.get_track_info(test_url)
+    # Можно установить шрифт для всего приложения
+    app.setStyle("Fusion") 
     
-    if result:
-        print(f"В main.py получены данные: {result.artist} - {result.title}. downloadUrl: {result.download_url}")
-    else:
-        print("Не удалось получить данные в main.py")
+    window = MainWindow()
+    window.show()
+    
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     main()
